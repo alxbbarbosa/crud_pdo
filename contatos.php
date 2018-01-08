@@ -27,7 +27,7 @@ try {
     $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $conexao->exec("set names utf8");
 } catch (PDOException $erro) {
-    echo "Erro na conexão:" . $erro->getMessage();
+    echo "<p class=\"bg-danger\">Erro na conexão:" . $erro->getMessage() . "</p>";
 }
 
 // Bloco If que Salva os dados no Banco - atua como Create e Update
@@ -51,24 +51,25 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save" && $empresa != "") {
 
         if ($stmt->execute()) {
             if ($stmt->rowCount() > 0) {
-                echo "Dados cadastrados com sucesso!";
+                echo "<p class=\"bg-success\">Dados cadastrados com sucesso!</p>";
                 $id = null;
                 $empresa = null;
                 $servico = null;
                 $contato = null;
+                $funcao = null;
                 $email = null;
                 $telefone = null;
                 $ramal = null;
                 $celular_1 = null;
                 $celular_2 = null;
             } else {
-                echo "Erro ao tentar efetivar cadastro";
+                echo "<p class=\"bg-danger\">Erro ao tentar efetivar cadastro</p>";
             }
         } else {
-            throw new PDOException("Erro: Não foi possível executar a declaração sql");
+            echo "<p class=\"bg-danger\">Erro: Não foi possível executar a declaração sql</p>";
         }
     } catch (PDOException $erro) {
-        echo "Erro: " . $erro->getMessage();
+        echo "<p class=\"bg-danger\">Erro: " . $erro->getMessage() . "</p>";
     }
 }
 
@@ -90,10 +91,10 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "upd" && $id != "") {
             $celular_1 = $rs->celular_1;
             $celular_2 = $rs->celular_2;
         } else {
-            throw new PDOException("Erro: Não foi possível executar a declaração sql");
+            echo "<p class=\"bg-danger\">Erro: Não foi possível executar a declaração sql</p>";
         }
     } catch (PDOException $erro) {
-        echo "Erro: " . $erro->getMessage();
+        echo "<p class=\"bg-danger\">Erro: " . $erro->getMessage() . "</p>";
     }
 }
 
@@ -103,13 +104,13 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del" && $id != "") {
         $stmt = $conexao->prepare("DELETE FROM contatos WHERE id = ?");
         $stmt->bindParam(1, $id, PDO::PARAM_INT);
         if ($stmt->execute()) {
-            echo "Registo foi excluído com êxito";
+            echo "<p class=\"bg-success\">Registo foi excluído com êxito</p>";
             $id = null;
         } else {
-            throw new PDOException("Erro: Não foi possível executar a declaração sql");
+            echo "<p class=\"bg-danger\">Erro: Não foi possível executar a declaração sql</p>";
         }
     } catch (PDOException $erro) {
-        echo "Erro: " . $erro->getMessage();
+        echo "<p class=\"bg-danger\">Erro: " . $erro->getMessage() . "</a>";
     }
 }
 
@@ -123,168 +124,182 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del" && $id != "") {
         <script src="assets/js/bootstrap.js" type="text/javascript" ></script>
     </head>
     <body>
-        <h1>Agenda de contatos</h1>
-        <hr>
-        <div class="panel panel-default">
-            <div class="panel-body">
-            <form action="?act=save" method="POST" name="form1" class="form-horizontal" >
-                <input type="hidden" name="id" <?php
-                // Preenche o id no campo id com um valor "value"
-                if (isset($id) && ($id != null || $id != "")) {
-                    echo "value=\"{$id}\"";
-                }
+        <div class="container">
+            <header class="row">
+                <br />
+            </header>
+            <article>
+                <div class="row">
+                    <form action="?act=save" method="POST" name="form1" class="form-horizontal" >
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <span class="panel-title">Contato</span>
+                            </div>
+                            <div class="panel-body">
 
-                ?> />
-                <div class="form-group">
-                    <label for="empresa" class="col-sm-2 control-label">Empresa</label>
-                    <div class="col-sm-10">
-                        <input type="text" name="empresa" <?php
-                        // Preenche o nome no campo empresa com um valor "value"
-                        if (isset($empresa) && ($empresa != null || $empresa != "")) {
-                            echo "value=\"{$empresa}\"";
-                        }
+                                <input type="hidden" name="id" <?php
+                                // Preenche o id no campo id com um valor "value"
+                                if (isset($id) && ($id != null || $id != "")) {
+                                    echo "value=\"{$id}\"";
+                                }
 
-                        ?> class="form-control"/>
+                                ?> />
+                                <div class="form-group">
+                                    <label for="empresa" class="col-sm-1 control-label">Empresa:</label>
+                                    <div class="col-md-5">
+                                        <input type="text" name="empresa" <?php
+                                        // Preenche o nome no campo empresa com um valor "value"
+                                        if (isset($empresa) && ($empresa != null || $empresa != "")) {
+                                            echo "value=\"{$empresa}\"";
+                                        }
+
+                                        ?> class="form-control"/>
+                                    </div>
+                                    <label for="servico" class="col-sm-1 control-label">Serviço:</label>
+                                    <div class="col-md-4">
+                                        <input type="text" name="servico" <?php
+                                        // Preenche o servico no campo contato com um valor "value"
+                                        if (isset($servico) && ($servico != null || $servico != "")) {
+                                            echo "value=\"{$servico}\"";
+                                        }
+
+                                        ?> class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contato" class="col-sm-1 control-label">Contato:</label>
+                                    <div class="col-md-4">
+                                        <input type="text" name="contato" <?php
+                                        // Preenche o email no campo contato com um valor "value"
+                                        if (isset($contato) && ($contato != null || $contato != "")) {
+                                            echo "value=\"{$contato}\"";
+                                        }
+
+                                        ?> class="form-control" />
+                                    </div>
+                                    <label for="funcao" class="col-sm-2 control-label">Função:</label>
+                                    <div class="col-md-4">
+                                        <input type="text" name="funcao" <?php
+                                        // Preenche o email no campo funcao com um valor "value"
+                                        if (isset($funcao) && ($funcao != null || $funcao != "")) {
+                                            echo "value=\"{$funcao}\"";
+                                        }
+
+                                        ?> class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email" class="col-sm-1 control-label">E-mail:</label>
+                                    <div class="col-md-4">
+                                        <input type="text" name="email" <?php
+                                        // Preenche o celular no campo email com um valor "value"
+                                        if (isset($email) && ($email != null || $email != "")) {
+                                            echo "value=\"{$email}\"";
+                                        }
+
+                                        ?> class="form-control" />
+                                    </div>
+                                    <label for="telefone" class="col-sm-2 control-label">Telefone:</label>
+                                    <div class="col-md-2">
+                                        <input type="text" name="telefone" <?php
+                                        // Preenche o celular no campo telefone com um valor "value"
+                                        if (isset($telefone) && ($telefone != null || $telefone != "")) {
+                                            echo "value=\"{$telefone}\"";
+                                        }
+
+                                        ?> class="form-control" />
+                                    </div>
+                                    <label for="ramal" class="col-sm-1 control-label">Ramal:</label>
+                                    <div class="col-md-1">
+                                        <input type="text" name="ramal" <?php
+                                        // Preenche o celular no campo ramal com um valor "value"
+                                        if (isset($ramal) && ($ramal != null || $ramal != "")) {
+                                            echo "value=\"{$ramal}\"";
+                                        }
+
+                                        ?> class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="celular_1" class="col-sm-1 control-label">Celular 1:</label>
+                                    <div class="col-md-2">
+                                        <input type="text" name="celular_1" <?php
+                                        // Preenche o celular no campo celular 1 com um valor "value"
+                                        if (isset($celular_1) && ($celular_1 != null || $celular_1 != "")) {
+                                            echo "value=\"{$celular_1}\"";
+                                        }
+
+                                        ?> class="form-control" />
+                                    </div>
+                                    <label for="celular_2" class="col-sm-4 control-label">Celular 2:</label>
+                                    <div class="col-md-2">
+                                        <input type="text" name="celular_2" <?php
+                                        // Preenche o celular no campo celular 2 com um valor "value"
+                                        if (isset($celular_2) && ($celular_2 != null || $celular_2 != "")) {
+                                            echo "value=\"{$celular_2}\"";
+                                        }
+
+                                        ?> class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <div class="clearfix">
+                                    <div class="pull-right">
+                                        <input type="submit" value=":: salvar ::" class="btn btn-primary" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="row">
+                    <div class="jumbotron">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Empresa</th>
+                                    <th>Serviço</th>
+                                    <th>Contato</th>
+                                    <!--<th>Função</th>
+                                    <!-- <th>E-mail</th> -->
+                                    <th>Telefone</th>
+                                    <th>Ramal</th>
+                                    <th>Celular 1</th>
+                                    <th>Celular 2</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                /**
+                                 *  Bloco que realiza o papel do Read - recupera os dados e apresenta na tela
+                                 */
+                                try {
+                                    $stmt = $conexao->prepare("SELECT * FROM contatos");
+                                    if ($stmt->execute()) {
+                                        while ($rs = $stmt->fetch(PDO::FETCH_OBJ)) {
+                                            echo "<tr>";
+                                            echo "<td>" . $rs->empresa . "</td><td>" . $rs->servico . "</td><td>" . $rs->contato . "</td>"
+                                            . "<td>" . $rs->telefone . "</td><td>" . $rs->ramal . "</td><td>" . $rs->celular_1 . "</td><td>" . $rs->celular_2
+                                            . "</td><td><center><a href=\"?act=upd&id=" . $rs->id . "\" class=\"btn btn-warning btn-xs\">:: Alterar ::</a>"
+                                            . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+                                            . "<a href=\"?act=del&id=" . $rs->id . "\" class=\"btn btn-danger btn-xs\" >:: Excluir ::</a></center></td>";
+                                            echo "</tr>";
+                                        }
+                                    } else {
+                                        echo "Erro: Não foi possível recuperar os dados do banco de dados";
+                                    }
+                                } catch (PDOException $erro) {
+                                    echo "Erro: " . $erro->getMessage();
+                                }
+
+                                ?>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="servico" class="col-sm-2 control-label">Serviço</label>
-                    <div class="col-sm-10">
-                        <input type="text" name="servico" <?php
-                        // Preenche o servico no campo contato com um valor "value"
-                        if (isset($servico) && ($servico != null || $servico != "")) {
-                            echo "value=\"{$servico}\"";
-                        }
-
-                        ?> class="form-control" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="contato" class="col-sm-2 control-label">Contato</label>
-                    <div class="col-sm-10">
-                        <input type="text" name="contato" <?php
-                        // Preenche o email no campo contato com um valor "value"
-                        if (isset($contato) && ($contato != null || $contato != "")) {
-                            echo "value=\"{$contato}\"";
-                        }
-
-                        ?> class="form-control" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="funcao" class="col-sm-2 control-label">Função</label>
-                    <div class="col-sm-10">
-                        <input type="text" name="funcao" <?php
-                        // Preenche o email no campo funcao com um valor "value"
-                        if (isset($funcao) && ($funcao != null || $funcao != "")) {
-                            echo "value=\"{$funcao}\"";
-                        }
-
-                        ?> class="form-control" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="email" class="col-sm-2 control-label">E-mail</label>
-                    <div class="col-sm-10">
-                        <input type="text" name="email" <?php
-                        // Preenche o celular no campo email com um valor "value"
-                        if (isset($email) && ($email != null || $email != "")) {
-                            echo "value=\"{$email}\"";
-                        }
-
-                        ?> class="form-control" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="telefone" class="col-sm-2 control-label">Telefone</label>
-                    <div class="col-sm-10">
-                        <input type="text" name="telefone" <?php
-                        // Preenche o celular no campo telefone com um valor "value"
-                        if (isset($telefone) && ($telefone != null || $telefone != "")) {
-                            echo "value=\"{$telefone}\"";
-                        }
-
-                        ?> class="form-control" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="ramal" class="col-sm-2 control-label">Ramal</label>
-                    <div class="col-sm-10">
-                        <input type="text" name="ramal" <?php
-                        // Preenche o celular no campo ramal com um valor "value"
-                        if (isset($ramal) && ($ramal != null || $ramal != "")) {
-                            echo "value=\"{$ramal}\"";
-                        }
-
-                        ?> class="form-control" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="celular_1" class="col-sm-2 control-label">Celular 1</label>
-                    <div class="col-sm-10">
-                        <input type="text" name="celular_1" <?php
-                        // Preenche o celular no campo celular 1 com um valor "value"
-                        if (isset($celular_1) && ($celular_1 != null || $celular_1 != "")) {
-                            echo "value=\"{$celular_1}\"";
-                        }
-
-                        ?> class="form-control" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="celular_2" class="col-sm-2 control-label">Celular 2</label>
-                    <div class="col-sm-10">
-                        <input type="text" name="celular_2" <?php
-                        // Preenche o celular no campo celular 2 com um valor "value"
-                        if (isset($celular_2) && ($celular_2 != null || $celular_2 != "")) {
-                            echo "value=\"{$celular_2}\"";
-                        }
-
-                        ?> class="form-control" />
-                    </div>
-                </div>
-                <input type="submit" value=":: salvar ::" class="btn btn-success" />
-                <input type="reset" value=":: Novo ::" class="btn btn-primary"/>
-            </form>
-            </div>
+            </article>
         </div>
-        <table class="table table-striped">
-            <tr>
-                <th>Empresa</th>
-                <th>Serviço</th>
-                <th>Contato</th>
-                <th>Função</th>
-                <th>E-mail</th>
-                <th>Telefone</th>
-                <th>Ramal</th>
-                <th>Celular 1</th>
-                <th>Celular 2</th>
-                <th>Ações</th>
-            </tr>
-            <?php
-            /**
-             *  Bloco que realiza o papel do Read - recupera os dados e apresenta na tela
-             */
-            try {
-                $stmt = $conexao->prepare("SELECT * FROM contatos");
-                if ($stmt->execute()) {
-                    while ($rs = $stmt->fetch(PDO::FETCH_OBJ)) {
-                        echo "<tr>";
-                        echo "<td>" . $rs->empresa . "</td><td>" . $rs->servico . "</td><td>" . $rs->contato . "</td><td>" . $rs->funcao . "</td><td>" . $rs->email
-                        . "<td>" . $rs->telefone . "</td><td>" . $rs->ramal . "</td><td>" . $rs->celular_1 . "</td><td>" . $rs->celular_2
-                        . "</td><td><center><a href=\"?act=upd&id=" . $rs->id . "\" class=\"btn btn-warning btn-xs\">:: Alterar ::</a>"
-                        . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-                        . "<a href=\"?act=del&id=" . $rs->id . "\" class=\"btn btn-danger btn-xs\" >:: Excluir ::</a></center></td>";
-                        echo "</tr>";
-                    }
-                } else {
-                    echo "Erro: Não foi possível recuperar os dados do banco de dados";
-                }
-            } catch (PDOException $erro) {
-                echo "Erro: " . $erro->getMessage();
-            }
-
-            ?>
-        </table>
     </body>
 </html>
